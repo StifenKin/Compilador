@@ -4,5 +4,5 @@ public enum DataType {
     INT,
     STRING,
     FLOAT,
-    SIN_DATO
+   SIN_DATO
 }

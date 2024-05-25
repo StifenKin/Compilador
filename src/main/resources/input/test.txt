@@ -6,7 +6,7 @@ a := 1
 b := 1
 c := 2
 p1 := "Hola Mundo"
-
+b := "Hola"
 leer(p1)
 escribir(p3)
 Si (a > b)
@@ -16,6 +16,16 @@ Si (a > b)
 Sino
 {
     escribir("a es mas chico o igual a b")
+}
+
+Si (a1 > b1)
+{
+    escribir("a1 es mas grande que b1")
+}
+
+Si (a1 > p3)
+{
+    escribir("a1 es mas grande que p3")
 }
 
 Si (a > b and c > b)

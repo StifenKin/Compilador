@@ -63,7 +63,50 @@ public class SimbolTable {
     public Boolean isInTable(String nombre) {
         return simbols.stream().anyMatch(symbol -> symbol.getNombre().equals(nombre));
     }
+    public DataType verificarTipoDato(DataType t1, DataType t2) {
 
+        if (t1.equals(t2)) {
+            System.out.println("Son del mismo tipo");
+            return t1;
+        }
+        else {
+            System.out.println("Error. No Son del mismo tipo");
+            return t1;
+        }
+    }
+
+    public DataType verificarTipoDato_En_Assig(DataType t1, DataType t2) {
+
+        if (t1.equals(t2)) {
+            System.out.println("Son del mismo tipo");
+            return t2;
+        }
+        else {
+            System.out.println("Error. No Son del mismo tipo");
+            return t2;
+        }
+    }
+    public DataType buscarTipo(String nombre) {
+        String tp = "";
+        DataType td;
+        td = DataType.SIN_DATO;
+        String nom ="_"+nombre;
+
+        for (SimbolRow row : simbols) {
+
+            if(row.getNombre().equals(nom)) {
+                tp = row.getId();
+            }
+        }
+            if(tp.equals(DataType.INT.toString()))
+                td = DataType.INT;
+             if(tp.equals(DataType.FLOAT.toString()))
+                td = DataType.FLOAT;
+             if(tp.equals(DataType.STRING.toString()))
+                td = DataType.STRING;
+
+             return  td;
+    }
     public void print() {
         System.out.println(
                 String.format("%-20s%-20s%-20s%-20s\n", "NOMBRE", "TIPODATO", "VALOR", "LONGITUD"));
