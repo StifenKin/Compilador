@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import lyc.compiler.simbolsTable.SimbolTable;
 import lyc.compiler.simbolsTable.SimbolRow;
 import lyc.compiler.simbolsTable.DataType;
+import lyc.compiler.polaca.Polaca;
 
 
 class Parser;
@@ -25,6 +26,7 @@ action code {:
     int des;
 
   public SimbolTable simbolTable = SimbolTable.getSingletonInstance();
+  public Polaca polaca = Polaca.getSingletonInstance();
     public ArrayList<String> identifiersList = new ArrayList();
 
     public void busco_y_reemplazo() {
@@ -193,22 +195,22 @@ params ::= STRING_CONSTANT:const1 COMA STRING_CONSTANT:const2 COMA STRING_CONSTA
    cadena2.add(const3);
    System.out.println("params");
 :};
-assignment ::= IDENTIFIER:id ASSIG expression {: tipo_expp= simbolTable.buscarTipo(id.toString());  simbolTable.verificarTipoDato_En_Assig(tipo_expp,tipo_exp); System.out.println("Assignment"); :};
+assignment ::= IDENTIFIER:id ASSIG expression {: tipo_expp= simbolTable.buscarTipo(id.toString());  simbolTable.verificarTipoDato_En_Assig(tipo_expp,tipo_exp); System.out.println("Assignment"); polaca.addPolaca(id.toString()); polaca.addPolaca(":="); :};
 assignment ::= IDENTIFIER:id ASSIG APLICAR_DESCUENTO OPEN_BRACKET parametros CLOSE_BRACKET {: precios.clear(); salida_precios.clear();System.out.println("Assignment"); :};
 parametros ::= REAL_CONSTANT:const_real COMA CORCH_ABRE lista CORCH_CIERRA COMA INTEGER_CONSTANT:const_entera {: des =Aplicar_descuento(const_real,const_entera); System.out.println("Parametros"); :};
 parametros ::= REAL_CONSTANT:const_real COMA CORCH_ABRE CORCH_CIERRA COMA INTEGER_CONSTANT:const_entera {: des =Aplicar_descuento(const_real,const_entera); System.out.println("Parametros"); :};
 lista ::= lista COMA REAL_CONSTANT:constant {: precios.add(constant); System.out.println("Lista"); :};
 lista ::= REAL_CONSTANT:constant {: precios.add(constant); System.out.println("Lista"); :};
-expression ::= expression PLUS term {: tipo_exp = simbolTable.verificarTipoDato(tipo_exp,tipo_term); System.out.println("+  "); :};
-expression ::= expression SUB term {: tipo_exp = simbolTable.verificarTipoDato(tipo_exp,tipo_term);System.out.println("-"); :};
+expression ::= expression PLUS term {: tipo_exp = simbolTable.verificarTipoDato(tipo_exp,tipo_term); System.out.println("+  "); polaca.addPolaca("+"); :};
+expression ::= expression SUB term {: tipo_exp = simbolTable.verificarTipoDato(tipo_exp,tipo_term);System.out.println("-"); polaca.addPolaca("-"); :};
 expression ::= term {: tipo_exp = tipo_term ;tDatos.add(tipo_exp);System.out.println("Expression = Term"); :};
-term ::= term MULT factor {: tipo_term = simbolTable.verificarTipoDato(tipo_term,tipo_factor); System.out.println("*"); :};
-term ::= term DIV factor {: tipo_term = simbolTable.verificarTipoDato(tipo_term,tipo_factor); System.out.println("/"); :};
+term ::= term MULT factor {: tipo_term = simbolTable.verificarTipoDato(tipo_term,tipo_factor); System.out.println("*"); polaca.addPolaca("*"); :};
+term ::= term DIV factor {: tipo_term = simbolTable.verificarTipoDato(tipo_term,tipo_factor); System.out.println("/"); polaca.addPolaca("/"); :};
 term ::= factor {: tipo_term = tipo_factor; System.out.println("Term = factor"); :};
-factor ::= IDENTIFIER:id  {: tipo_factor = simbolTable.buscarTipo(id.toString()) ;  simbolTable.add("_"+id, tipo, id.toString(), id.toString().length());System.out.println("Id:  " + id); :};
-factor ::= INTEGER_CONSTANT:constant {: tipo_factor = DataType.INT; simbolTable.add("_"+constant, DataType.INT, constant.toString(), constant.toString().length());System.out.println("Constant: " + constant ); :};
-factor ::= REAL_CONSTANT:constant {: tipo_factor = DataType.FLOAT; simbolTable.add("_"+constant, DataType.FLOAT, constant.toString(), constant.toString().length()); System.out.println("Constant REAL: " + constant ); :};
-factor ::= STRING_CONSTANT:constant {: tipo_factor = DataType.STRING; simbolTable.add("_"+constant, DataType.STRING, constant.toString(), constant.toString().length()); System.out.println("Constant STRING: " + constant ); :};
+factor ::= IDENTIFIER:id  {: tipo_factor = simbolTable.buscarTipo(id.toString()) ;  simbolTable.add("_"+id, tipo, id.toString(), id.toString().length());System.out.println("Id:  " + id); polaca.addPolaca(id.toString()); :};
+factor ::= INTEGER_CONSTANT:constant {: tipo_factor = DataType.INT; simbolTable.add("_"+constant, DataType.INT, constant.toString(), constant.toString().length());System.out.println("Constant: " + constant ); polaca.addPolaca(constant.toString()); :};
+factor ::= REAL_CONSTANT:constant {: tipo_factor = DataType.FLOAT; simbolTable.add("_"+constant, DataType.FLOAT, constant.toString(), constant.toString().length()); System.out.println("Constant REAL: " + constant ); polaca.addPolaca(constant.toString()); :};
+factor ::= STRING_CONSTANT:constant {: tipo_factor = DataType.STRING; simbolTable.add("_"+constant, DataType.STRING, constant.toString(), constant.toString().length()); System.out.println("Constant STRING: " + constant ); polaca.addPolaca(constant.toString()); :};
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); :};
 initiation ::= INIT LLAVE_ABRE dec LLAVE_CIERRA  {: System.out.println("Declaracion de variables"); :};
 dec ::= variable {: System.out.println("dec de variables"); :};
